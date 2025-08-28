@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Monitor JSON com som</title>
+</head>
+<body>
+  <h1>Monitorando un.json...</h1>
+  <button onclick="iniciar()">Iniciar monitoramento</button>
+
+  <script>
+    const url = "un.json"; 
+    let audio;
+    let tocando = false; // controle se o som está ativo
+
+    // Inicia o som em loop
+    function iniciarSom() {
+      if (!tocando) {
+        audio = new Audio("notify.wav");
+        audio.loop = true; // som contínuo
+        audio.play().catch(err => console.log("Som bloqueado:", err));
+        tocando = true;
+        console.log("🔊 Som tocando...");
+      }
+    }
+
+    // Para o som
+    function pararSom() {
+      if (tocando && audio) {
+        audio.pause();
+        audio.currentTime = 0;
+        tocando = false;
+        console.log("🔇 Som parado...");
+      }
+    }
+
+    // Verifica o JSON
+    async function checarJSON() {
+      try {
+        let resposta = await fetch(url + "?_=" + Date.now()); // evita cache
+        let dados = await resposta.json();
+
+        if (dados.valor && dados.valor > 0) {
+          iniciarSom();
+        } else {
+          pararSom();
+        }
+
+      } catch (e) {
+        console.error("Erro ao ler un.json:", e);
+      }
+    }
+
+    // Só inicia após clique (requisito dos navegadores)
+    function iniciar() {
+      console.log("Monitoramento iniciado...");
+      setInterval(checarJSON, 3000); // verifica a cada 3 segundos
+    }
+  </script>
+</body>
+</html>
