@@ -9,14 +9,14 @@
   <button onclick="iniciar()">Iniciar monitoramento</button>
 
   <script>
-    const url = "un.json"; 
+    const url = "https://davioduarte.github.io/decante-core/un.json"; 
     let audio;
     let tocando = false; // controle se o som está ativo
 
     // Inicia o som em loop
     function iniciarSom() {
       if (!tocando) {
-        audio = new Audio("notify.wav");
+        audio = new Audio("https://davioduarte.github.io/decante-core/notify.wav");
         audio.loop = true; // som contínuo
         audio.play().catch(err => console.log("Som bloqueado:", err));
         tocando = true;
